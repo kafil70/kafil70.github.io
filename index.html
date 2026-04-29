@@ -712,13 +712,14 @@
     animation: fadeUp 0.8s 0.5s ease forwards;
   }
 
-  /* ─── HAMBURGER NAV ─────────────────────────────────────── */
+  /* ─── HAMBURGER + DROPDOWN NAV ──────────────────────────── */
   .nav-hamburger {
     display: none;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
     cursor: pointer;
-    padding: 4px;
+    padding: 6px 4px;
     background: none;
     border: none;
     z-index: 200;
@@ -726,86 +727,124 @@
 
   .nav-hamburger span {
     display: block;
-    width: 24px;
+    width: 22px;
     height: 1.5px;
     background: var(--ink);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.28s ease, opacity 0.2s ease, width 0.28s ease;
     transform-origin: center;
+    border-radius: 1px;
   }
 
+  /* X animation when open */
   .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
   .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-  .nav-drawer {
-    display: none;
+  /* ── Dropdown panel */
+  .nav-dropdown {
+    display: none; /* hidden on desktop */
     position: fixed;
-    inset: 0;
-    z-index: 150;
-    pointer-events: none;
+    top: 0; left: 0; right: 0;
+    z-index: 99;
+    /* panel slides from under the navbar */
+    padding-top: 58px; /* navbar height */
   }
 
-  .nav-drawer.open { pointer-events: all; }
-
-  .nav-drawer-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(14,13,11,0.55);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    backdrop-filter: blur(4px);
-  }
-
-  .nav-drawer.open .nav-drawer-backdrop { opacity: 1; }
-
-  .nav-drawer-panel {
-    position: absolute;
-    top: 0; right: 0;
-    width: min(80vw, 300px);
-    height: 100%;
+  .nav-dropdown-panel {
     background: var(--ink);
-    padding: 5rem 2.5rem 3rem;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(.22,.68,0,1.1);
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+    border-bottom: 2px solid var(--amber);
+    transform: translateY(-100%);
+    transition: transform 0.32s cubic-bezier(.22,.68,0,1.05);
+    overflow: hidden;
   }
 
-  .nav-drawer.open .nav-drawer-panel { transform: translateX(0); }
+  .nav-dropdown.open .nav-dropdown-panel {
+    transform: translateY(0);
+			 
+									
+			   
+								  
+							   
+  }
 
-  .nav-drawer-panel a {
-    font-family: var(--serif);
-    font-size: 1.6rem;
+  .nav-dropdown-panel a {
+
+					 
+					   
+					 
+							
+				 
+						   
+							  
+								
+															
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   
+
+																  
+
+					   
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--paper);
     text-decoration: none;
-    padding: 0.85rem 0;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid #2a2620;
-    letter-spacing: -0.01em;
-    transition: color 0.2s;
+    letter-spacing: 0.01em;
+    transition: color 0.18s, background 0.18s;
   }
 
-  .nav-drawer-panel a:last-child { border-bottom: none; }
-  .nav-drawer-panel a:hover { color: var(--amber-lt); }
+  .nav-dropdown-panel a:last-child { border-bottom: none; }
 
-  .nav-drawer-tag {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+  .nav-dropdown-panel a:hover {
+    color: var(--amber-lt);
+    background: rgba(200,137,42,0.06);
+  }
+
+  .nav-dropdown-panel a::after {
+    content: '→';
+    font-size: 0.75rem;
+						   
+							  
     color: var(--amber);
-    margin-bottom: 2rem;
-    display: block;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.18s, transform 0.18s;
+  }
+
+  .nav-dropdown-panel a:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Scrim behind dropdown */
+  .nav-dropdown-scrim {
+    position: fixed;
+    inset: 0;
+    top: 58px;
+    background: rgba(14,13,11,0.4);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .nav-dropdown.open .nav-dropdown-scrim {
+    opacity: 1;
+    pointer-events: all;
   }
 
   /* ─── RESPONSIVE: TABLET (≤ 900px) ─────────────────────── */
   @media (max-width: 900px) {
     /* Nav */
-    nav { padding: 1rem 1.5rem; }
+    nav { padding: 0.9rem 1.25rem; }
     .nav-links { display: none; }
     .nav-hamburger { display: flex; }
-    .nav-drawer { display: block; }
-
+    .nav-dropdown { display: block; }
     /* Hero — stack photo on top, content below */
     #hero {
       grid-template-columns: 1fr;
@@ -948,7 +987,7 @@
     .extras-cols { grid-template-columns: 1fr; gap: 2rem; }
 
     /* Nav drawer */
-    .nav-drawer-panel { width: 85vw; }
+    /*.nav-drawer-panel { width: 85vw; }*/
 
     /* Photo overlay contact — tighten on mobile */
     .hero-photo-overlay { padding: 1rem 1.25rem; }
@@ -1200,17 +1239,17 @@
   </button>
 </nav>
 
-<!-- ── MOBILE DRAWER ────────────────────────────────────────── -->
-<div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Navigation">
-  <div class="nav-drawer-backdrop" id="drawerBackdrop"></div>
-  <nav class="nav-drawer-panel">
-    <span class="nav-drawer-tag">Mohammad Kafil Uddin</span>
-    <a href="#experience" class="drawer-link">Experience</a>
-    <a href="#skills" class="drawer-link">Skills</a>
-    <a href="#projects" class="drawer-link">Projects</a>
-    <a href="#education" class="drawer-link">Education</a>
-    <a href="#contact" class="drawer-link">Contact</a>
-  </nav>
+<!-- ── MOBILE DROPDOWN NAV ──────────────────────────────────── -->
+<div class="nav-dropdown" id="navDropdown" role="navigation" aria-label="Mobile navigation">
+  <div class="nav-dropdown-scrim" id="dropdownScrim"></div>
+  <div class="nav-dropdown-panel">
+    <a href="#experience" class="dropdown-link">Experience</a>
+    <a href="#skills" class="dropdown-link">Skills</a>
+    <a href="#projects" class="dropdown-link">Projects</a>
+    <a href="#education" class="dropdown-link">Education</a>
+    <a href="#extras" class="dropdown-link">Beyond the Code</a>
+    <a href="#contact" class="dropdown-link">Contact</a>
+  </div>
 </div>
 
 <!-- ── HERO ────────────────────────────────────────────────── -->
@@ -1698,34 +1737,35 @@
     t.style.transition = 'border-color 0.25s, color 0.25s';
   });
 
-  // ── Hamburger / drawer
-  const hamburger   = document.getElementById('hamburger');
-  const navDrawer   = document.getElementById('navDrawer');
-  const backdrop    = document.getElementById('drawerBackdrop');
-  const drawerLinks = document.querySelectorAll('.drawer-link');
 
-  function openDrawer() {
+  // ── Hamburger / dropdown
+  const hamburger     = document.getElementById('hamburger');
+  const navDropdown   = document.getElementById('navDropdown');
+  const dropdownScrim = document.getElementById('dropdownScrim');
+  const dropdownLinks = document.querySelectorAll('.dropdown-link');
+
+  function openDropdown() {
     hamburger.classList.add('open');
-    navDrawer.classList.add('open');
+    navDropdown.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
   }
 
-  function closeDrawer() {
+  function closeDropdown() {
     hamburger.classList.remove('open');
-    navDrawer.classList.remove('open');
+    navDropdown.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
 
   hamburger.addEventListener('click', () =>
-    navDrawer.classList.contains('open') ? closeDrawer() : openDrawer()
+    navDropdown.classList.contains('open') ? closeDropdown() : openDropdown()
   );
 
-  backdrop.addEventListener('click', closeDrawer);
-  drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+  dropdownScrim.addEventListener('click', closeDropdown);
+  dropdownLinks.forEach(link => link.addEventListener('click', closeDropdown));
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && navDrawer.classList.contains('open')) closeDrawer();
+    if (e.key === 'Escape' && navDropdown.classList.contains('open')) closeDropdown();
   });
 </script>
 </body>
